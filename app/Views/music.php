@@ -11,7 +11,7 @@
     body {
          font-family: Arial, sans-serif;
          text-align: center;
-         background-color: #f5f5f5;
+         background-color: #d9edf8;
          padding: 20px;
      }
 
@@ -23,7 +23,7 @@
          max-width: 400px;
          margin: 0 auto;
          padding: 20px;
-         background-color: #fff;
+         background-color: #ffadad;
          box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
      }
 
@@ -39,79 +39,144 @@
      #playlist li {
          cursor: pointer;
          padding: 10px;
-         background-color: #eee;
+         background-color: #f5cac3;
          margin: 5px 0;
          transition: background-color 0.2s ease-in-out;
      }
 
      #playlist li:hover {
-         background-color: #ddd;
+         background-color: #f7ede2;
      }
 
      #playlist li.active {
-         background-color: #007bff;
-         color: #fff;
+         background-color: #c0d8c0;
+         color: #c0d8c0;
      }
+     
+    
+     
     </style>
 </head>
 <body>
 
 
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="PlaylistModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Playlist</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <br>
-
-              <a href="/playlist/">your playlist</a>
-              <br>
-
-
+          <?php if(isset($plays)): ?>
+              <?php foreach($plays as $p): ?>
+                  <a href="/selectedplaylist/<?= $p['playlistname']; ?>" class="btn btn-primary" style="text-decoration: none;"><?= $p['playlistname']; ?></a>
+                  <a href="/deleteplaylist/<?= $p['id']; ?>" class="hover-effect">
+                      <img src="<?= base_url(); ?>/delete.jpg" width="20">
+                  </a>
+              <br><br>
+              <?php endforeach; ?>
+          <?php endif; ?>
         </div>
         <div class="modal-footer">
-          <a href="#" data-bs-dismiss="modal">Close</a>
-          <a href="#" data-bs-toggle="modal" data-bs-target="#createPlaylist">Create New</a>
+          <a href="#" data-bs-dismiss="modal" class="btn btn-secondary"style="text-decoration: none;">Close</a>
+          <a href="#" data-bs-toggle="modal" data-bs-target="#createPlaylistModal" class="btn btn-primary"style="text-decoration: none;">Create New Playlist</a>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Modal for playlist creation form -->
+<div class="modal fade" id="createPlaylistModal" tabindex="-1" aria-labelledby="createPlaylistModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createPlaylistModalLabel">Create New Playlist</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              
+                <!-- Add your form here -->
+                <form action="/createplaylist" method="post">
+                    <div class="mb-3">
+                        <label for="playlistname" class="form-label">Playlist Name</label>
+                        <input type="text" class="form-control" id="playlistname" name="playlistname" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </form>
 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for song addition form -->
+<div class="modal fade" id="SongModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Upload a Song:</h3>
+        </div>
+          <!--INPUT FILE -->
+          <form action="/addsong" method="post" enctype="multipart/form-data">
+            <label for="myfile">Select file:</label>
+            <input type="file" id="myfile" name="myfile" accept=".mp3">
+            <input type="submit" value="Upload"><br>
+          </form>
+          <div class="modal-footer">
+          <a href="#" data-bs-dismiss="modal" class="btn btn-secondary"style="text-decoration: none;">Close</a>
         </div>
       </div>
     </div>
   </div>
 
-
   <form action="/searchsong" method="get">
-    <input type="search" name="search" placeholder="search song">
-    <button type="submit" class="btn btn-primary">search</button>
-  </form><br>
+    <input type="search" name="search" placeholder="Search a Song">
+    <button type="submit" class="btn btn-primary">Search</button>
+</form><br>
 
-    <h1>Music Player</h1>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  My Playlist
-</button>
+   <h1>Music Player</h1>
+   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#PlaylistModal">My Playlist</button>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#SongModal">Add Song</button><br><br><br>
 
-<audio id="audio" controls autoplay></audio>
 
-<ul id="playlist">
-<?php if ($mus): ?>
-        <?php foreach ($mus as $music): ?>
-            <li data-src="<?= base_url(); ?>/music/<?= $music['musicname'];?>.mp3"><?= $music['musicname']; ?>
-              <a href="/addtoplaylist" class="hover-effect">
-                  <img src="<?= base_url(); ?>/add.png" width="20">
-              </a>
-            </li>
+
+
+    <!--INPUT FILE -->
+    <h3>Upload a Song:</h3>
+               <form action="/addsong" method="post" enctype="multipart/form-data">
+                 <label for="myfile">Select file:</label>
+                 <input type="file" id="myfile" name="myfile" accept=".mp3">
+                  <input type="submit" value="Upload">
+              </form> 
+              <br>
+
+              
+
+
+    <audio id="audio" controls autoplay></audio>
+
+    <ul id="playlist">
+    <?php if ($mus): ?>
+            <?php foreach ($mus as $music): ?>
+                <li data-src="<?= base_url(); ?>/music/<?= $music['musicname'];?>.mp3"><?= $music['musicname']; ?>
+                  <a href="/addtoplaylist" class="hover-effect">
+                      <img src="<?= base_url(); ?>/add.png" width="20">
+                  </a>
+                </li>
+            <?php endforeach; ?>
+    <?php else: ?>
+        <?php foreach ($music as $m): ?>
+          <li data-src="<?= base_url(); ?>/music/<?= $m['musicname'];?>.mp3"><?= $m['musicname']; ?>
+          <a href="/addtoplaylist" class="hover-effect">
+              <img src="<?= base_url(); ?>/add.png" width="20">
+          </a></li>
         <?php endforeach; ?>
-<?php else: ?>
-    <?php foreach ($music as $m): ?>
-      <li data-src="<?= base_url(); ?>/music/<?= $m['musicname'];?>.mp3"><?= $m['musicname']; ?>
-      <a href="/addtoplaylist" class="hover-effect">
-          <img src="<?= base_url(); ?>/add.png" width="20">
-      </a></li>
-    <?php endforeach; ?>
-<?php endif; ?>
-</ul>
+    <?php endif; ?>
+    </ul>
 
 
     <div class="modal" id="myModal">
@@ -127,12 +192,10 @@
           <!-- Modal body -->
           <div class="modal-body">
           <form action="/" method="post">
-            <!-- <p id="modalData"></p> -->
+            <p id="modalData"></p>
             <input type="hidden" id="musicID" name="musicID">
             <select  name="playlist" class="form-control" >
-
               <option value="playlist">playlist</option>
-
             </select>
             <input type="submit" name="add">
             </form>
@@ -142,6 +205,7 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
           </div>
+
 
         </div>
       </div>
