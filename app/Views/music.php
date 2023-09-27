@@ -80,10 +80,10 @@
       </div>
     </div>
   </div>
-  <form action="/" method="get">
+  <form action="/search" method="get">
     <input type="search" name="search" placeholder="search song">
     <button type="submit" class="btn btn-primary">search</button>
-  </form>
+  </form><br>
     <h1>Music Player</h1>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
   My Playlist
