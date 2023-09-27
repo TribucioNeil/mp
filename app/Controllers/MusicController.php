@@ -19,7 +19,7 @@ class MusicController extends BaseController
 
         if ($searchQuery) {
             $main = new MusicModel();
-            $data['mus']= $main->like('musicname',$searchQuery )->findAll();
+            $data['mus'] = $main->like('musicname', $searchQuery)->findAll();
         }
         return view('music', $data);
     }

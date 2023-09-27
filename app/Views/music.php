@@ -80,21 +80,40 @@
       </div>
     </div>
   </div>
-  <form action="/search" method="get">
+
+
+  <form action="/searchsong" method="get">
     <input type="search" name="search" placeholder="search song">
     <button type="submit" class="btn btn-primary">search</button>
   </form><br>
+
     <h1>Music Player</h1>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
   My Playlist
 </button>
 
-    <audio id="audio" controls autoplay></audio>
-    <ul id="playlist">
-        <?php foreach ($music as $m): ?>
-          <li data-src="<?= base_url(); ?>/music/<?= $m['musicname'];?>.mp3"><?= $m['musicname']; ?> </li>
-          <?php endforeach; ?>
-    </ul>
+<audio id="audio" controls autoplay></audio>
+
+<ul id="playlist">
+<?php if ($mus): ?>
+        <?php foreach ($mus as $music): ?>
+            <li data-src="<?= base_url(); ?>/music/<?= $music['musicname'];?>.mp3"><?= $music['musicname']; ?>
+              <a href="/addtoplaylist" class="hover-effect">
+                  <img src="<?= base_url(); ?>/add.png" width="20">
+              </a>
+            </li>
+        <?php endforeach; ?>
+<?php else: ?>
+    <?php foreach ($music as $m): ?>
+      <li data-src="<?= base_url(); ?>/music/<?= $m['musicname'];?>.mp3"><?= $m['musicname']; ?>
+      <a href="/addtoplaylist" class="hover-effect">
+          <img src="<?= base_url(); ?>/add.png" width="20">
+      </a></li>
+    <?php endforeach; ?>
+<?php endif; ?>
+</ul>
+
+
     <div class="modal" id="myModal">
       <div class="modal-dialog">
         <div class="modal-content">
